@@ -21,9 +21,8 @@ const Input = ({ placeholder, name, type, value, handleChange }) => (
 );
 
 const Welcome = () => {
-
-  const {value} = useContext(TransactionContext);
-  console.log("Context State comes from Transaction Context ",value);
+  const { connectWallet} = useContext(TransactionContext);
+  console.log("Context State comes from Transaction Context ");
   
   // const { currentAccount, connectWallet, handleChange, sendTransaction, formData, isLoading } = useContext(TransactionContext);
 
@@ -36,9 +35,7 @@ const Welcome = () => {
 
   //   sendTransaction();
   // };
-const  connectWallet =()=>{
 
-}
 const handleChange =()=>{
 
 }
@@ -83,7 +80,7 @@ const handleSubmit =()=>{
             </div>
           </div>
         </div>
-{/* Right side of welcome section  */}
+        {/* Right side of welcome section  */}
         <div className="flex flex-col flex-1 items-center justify-start w-full mf:mt-0 mt-10">
           <div className="p-3 flex justify-end items-start flex-col rounded-xl h-40 sm:w-72 w-full my-5 eth-card .white-glassmorphism ">
             <div className="flex justify-between flex-col w-full h-full">
@@ -94,9 +91,7 @@ const handleSubmit =()=>{
                 <BsInfoCircle fontSize={17} color="#fff" />
               </div>
               <div>
-                <p className="text-white font-light text-sm">
-                  0xasd4.....gft
-                </p>
+                <p className="text-white font-light text-sm">0xasd4.....gft</p>
                 <p className="text-white font-semibold text-lg mt-1">
                   Ethereum
                 </p>
@@ -130,7 +125,7 @@ const handleSubmit =()=>{
               type="text"
               handleChange={handleChange}
             />
-{/* Send Button */}
+            {/* Send Button */}
             <div className="h-[1px] w-full bg-gray-400 my-2" />
             {false ? (
               <Loader />

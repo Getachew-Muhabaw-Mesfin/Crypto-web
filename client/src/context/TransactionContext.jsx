@@ -19,21 +19,43 @@ const getEthereumContract = () => {
 };
 
 export const TransactionProvider = ({ children }) => {
+  const [currentAccount, setCurrentAccount] = useState("");;
 
   const checkIfWalletIsConnected = async () => {
     if (!ethereum) return alert("PLEASE INSTALL METAMASK !!");
     const accounts = await ethereum.request({method:'eth_accounts'})
     console.log(accounts)
   };
+
+  //Connnect Wallet function
+  const connectWallet = async()=>{
+    try {
+        if (!ethereum) return alert("PLEASE INSTALL METAMASK !!");
+        const accounts = await ethereum.request({ method: "eth_requestAccounts" });
+        setCurrentAccount(accounts[0]);
+    } catch (error) {
+      console.log(error);
+      throw new Error("No Ethereum Object ....Please install metamask and try again!")
+      
+    }
+  }
+
+
+
 useEffect(()=>{
   checkIfWalletIsConnected();
 },[])
   return (
-    <TransactionContext.Provider value={{ value: "Test Context" }}>
+    <TransactionContext.Provider value={{ connectWallet }}>
       {children}
     </TransactionContext.Provider>
   );
 };
+
+
+
+
+
 // const createEthereumContract = () => {
 //   const provider = new ethers.providers.Web3Provider(ethereum);
 //   const signer = provider.getSigner();
