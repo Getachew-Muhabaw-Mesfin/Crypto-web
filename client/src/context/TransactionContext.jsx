@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
 
-import { contractAddress,contractABI} from '../utils/constants';
+import { contractAddress, contractABI } from "../utils/constants";
 
 export const TransactionContext = React.createContext();
 
 const { ethereum } = window;
 
-const getEthereumContract =()=>{
+const getEthereumContract = () => {
   const provider = new ethers.providers.Web3Provider(ethereum);
   const signer = provider.getSigner();
   const transactionsContract = new ethers.Contract(
@@ -15,16 +15,25 @@ const getEthereumContract =()=>{
     contractABI,
     signer
   );
-  console.log({provider,signer,transactionsContract})
-}
+  console.log({ provider, signer, transactionsContract });
+};
 
-export const TransactionProvider =({children})=>{
-  return(
-    <TransactionContext.Provider value={{value:'Test Context'}}>
+export const TransactionProvider = ({ children }) => {
+
+  const checkIfWalletIsConnected = async () => {
+    if (!ethereum) return alert("PLEASE INSTALL METAMASK !!");
+    const accounts = await ethereum.request({method:'eth_accounts'})
+    console.log(accounts)
+  };
+useEffect(()=>{
+  checkIfWalletIsConnected();
+},[])
+  return (
+    <TransactionContext.Provider value={{ value: "Test Context" }}>
       {children}
     </TransactionContext.Provider>
-  )
-}
+  );
+};
 // const createEthereumContract = () => {
 //   const provider = new ethers.providers.Web3Provider(ethereum);
 //   const signer = provider.getSigner();
