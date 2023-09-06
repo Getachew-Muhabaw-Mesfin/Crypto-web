@@ -15,7 +15,8 @@ const getEthereumContract = () => {
     contractABI,
     signer
   );
-  console.log({ provider, signer, transactionsContract });
+  // console.log({ provider, signer, transactionsContract });
+  return transactionsContract;
 };
 
 export const TransactionProvider = ({ children }) => {
@@ -27,8 +28,11 @@ export const TransactionProvider = ({ children }) => {
     message: "",
   });
 
+  const [isLoading, setIsLoading] = useState(false);
+  const [transactionCount, setTransactionCount] = useState(localStorage.getItem('transactionCount'))
+
   const handleChange = (e, name) => {
-    setformData(prevState=> ({ ...prevState, [name]: e.target.value }));
+    setformData((prevState) => ({ ...prevState, [name]: e.target.value }));
   };
 
   const checkIfWalletIsConnected = async () => {
@@ -73,8 +77,40 @@ export const TransactionProvider = ({ children }) => {
     try {
       if (!ethereum) return alert("PLEASE INSTALL METAMASK !!");
       //get the data from the form
-     const {addressTo, amount, keyword, message} = formData;
-     getEthereumContract()
+      const { addressTo, amount, keyword, message } = formData;
+      const transactionContract = getEthereumContract();
+      const parsedAmount = ethers.utils.parseEther(amount);
+
+      // send functionality
+
+      await ethereum.request({
+        method: "eth_sendTransaction",
+        params: [
+          {
+            from: currentAccount,
+            to: addressTo,
+            gas: "0x5208",
+            value: parsedAmount._hex,
+          },
+        ],
+      });
+
+      const transactionHash = await transactionContract.addToBlockchain(
+        addressTo,
+        parsedAmount,
+        message,
+        keyword
+      );
+      setIsLoading(true);
+      console.log(`Loding -${transactionHash.hash}`);
+      await transactionHash.wait();
+      //Scucess
+      setIsLoading(false);
+      console.log(`Success -${transactionHash.hash}`);
+
+      //get transaction count
+      const transactionCount = await transactionContract.getTransactionCount();
+      setTransactionCount(transactionCount.toNumber());
     } catch (error) {
       console.log(error);
       throw new Error(
