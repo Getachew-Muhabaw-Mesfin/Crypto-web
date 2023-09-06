@@ -19,56 +19,88 @@ const getEthereumContract = () => {
 };
 
 export const TransactionProvider = ({ children }) => {
-  const [currentAccount, setCurrentAccount] = useState("");;
+  const [currentAccount, setCurrentAccount] = useState("");
+  const [formData, setFormData] = useState({
+    addressTo: "",
+    amount: "",
+    keyword: "",
+    message: "",
+  });
+
+  const handleChange = (e, name) => {
+    setFormData((prevState) => ({ ...prevState, [name]: e.target.value }));
+  };
 
   const checkIfWalletIsConnected = async () => {
-  try {  if (!ethereum) return alert("PLEASE INSTALL METAMASK !!");
-  const accounts = await ethereum.request({ method: "eth_accounts" });
-  //Check if the account is thier or not
-  if (accounts.length) {
-    setCurrentAccount(accounts[0]);
-    // should return all the transactions
-  } else {
-    alert("NO ACCOUNTS FOUND !");
-    console.log("NO ACCOUNTS FOUND !");
-  }
-    
-  } catch (error) {
-     console.log(error);
-     throw new Error(
-       "No Ethereum Object ....Please install metamask and try again!"
-     );
-  }
+    try {
+      if (!ethereum) return alert("PLEASE INSTALL METAMASK !!");
+      const accounts = await ethereum.request({ method: "eth_accounts" });
+      //Check if the account is thier or not
+      if (accounts.length) {
+        setCurrentAccount(accounts[0]);
+        // should return all the transactions
+      } else {
+        alert("NO ACCOUNTS FOUND !");
+        console.log("NO ACCOUNTS FOUND !");
+      }
+    } catch (error) {
+      console.log(error);
+      throw new Error(
+        "No Ethereum Object ....Please install metamask and try again!"
+      );
+    }
   };
 
   //Connnect Wallet function
-  const connectWallet = async()=>{
+  const connectWallet = async () => {
     try {
-        if (!ethereum) return alert("PLEASE INSTALL METAMASK !!");
-        const accounts = await ethereum.request({ method: "eth_requestAccounts" });
-        setCurrentAccount(accounts[0]);
+      if (!ethereum) return alert("PLEASE INSTALL METAMASK !!");
+      const accounts = await ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      setCurrentAccount(accounts[0]);
     } catch (error) {
       console.log(error);
-      throw new Error("No Ethereum Object ....Please install metamask and try again!")
-      
+      throw new Error(
+        "No Ethereum Object ....Please install metamask and try again!"
+      );
     }
-  }
+  };
 
+  //Send Transactions
 
+  const sendTransaction = async () => {
+    try {
+      if (!ethereum) return alert("PLEASE INSTALL METAMASK !!");
+      //get the data from the form
+     const [addressTo, amount, keyword, message] = formData;
+     getEthereumContract()
+    } catch (error) {
+      console.log(error);
+      throw new Error(
+        "No Ethereum Object ....Please install metamask and try again!"
+      );
+    }
+  };
 
-useEffect(()=>{
-  checkIfWalletIsConnected();
-},[])
+  useEffect(() => {
+    checkIfWalletIsConnected();
+  }, []);
   return (
-    <TransactionContext.Provider value={{ connectWallet, currentAccount }}>
+    <TransactionContext.Provider
+      value={{
+        connectWallet,
+        currentAccount,
+        formData,
+        setFormData,
+        handleChange,
+        sendTransaction,
+      }}
+    >
       {children}
     </TransactionContext.Provider>
   );
 };
-
-
-
-
 
 // const createEthereumContract = () => {
 //   const provider = new ethers.providers.Web3Provider(ethereum);
