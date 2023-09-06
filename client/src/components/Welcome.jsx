@@ -32,23 +32,16 @@ const Welcome = () => {
 
   // const { currentAccount, connectWallet, handleChange, sendTransaction, formData, isLoading } = useContext(TransactionContext);
 
-  // const handleSubmit = (e) => {
-  //   const { addressTo, amount, keyword, message } = formData;
+  const handleSubmit = (e) => {
+    const { addressTo, amount, keyword, message } = formData;
 
-  //   e.preventDefault();
-
-  //   if (!addressTo || !amount || !keyword || !message) return;
-
-  //   sendTransaction();
-  // };
-
-  
-  const handleSubmit = () => {
-    const [addressTo,amount,keyword,message] = formData;
     e.preventDefault();
-    if(!addressTo || !amount || !keyword || !message) return;
+
+    if (!addressTo || !amount || !keyword || !message) return;
+
     sendTransaction();
   };
+
   return (
     <div className="flex w-full justify-center items-center">
       <div className="flex mf:flex-row flex-col items-start justify-between md:p-20 py-12 px-4">

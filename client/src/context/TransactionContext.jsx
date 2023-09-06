@@ -20,7 +20,7 @@ const getEthereumContract = () => {
 
 export const TransactionProvider = ({ children }) => {
   const [currentAccount, setCurrentAccount] = useState("");
-  const [formData, setFormData] = useState({
+  const [formData, setformData] = useState({
     addressTo: "",
     amount: "",
     keyword: "",
@@ -28,7 +28,7 @@ export const TransactionProvider = ({ children }) => {
   });
 
   const handleChange = (e, name) => {
-    setFormData((prevState) => ({ ...prevState, [name]: e.target.value }));
+    setformData(prevState=> ({ ...prevState, [name]: e.target.value }));
   };
 
   const checkIfWalletIsConnected = async () => {
@@ -73,7 +73,7 @@ export const TransactionProvider = ({ children }) => {
     try {
       if (!ethereum) return alert("PLEASE INSTALL METAMASK !!");
       //get the data from the form
-     const [addressTo, amount, keyword, message] = formData;
+     const {addressTo, amount, keyword, message} = formData;
      getEthereumContract()
     } catch (error) {
       console.log(error);
@@ -92,7 +92,6 @@ export const TransactionProvider = ({ children }) => {
         connectWallet,
         currentAccount,
         formData,
-        setFormData,
         handleChange,
         sendTransaction,
       }}
