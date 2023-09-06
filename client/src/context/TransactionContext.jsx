@@ -44,7 +44,7 @@ export const TransactionProvider = ({ children }) => {
         setCurrentAccount(accounts[0]);
         // should return all the transactions
       } else {
-        alert("NO ACCOUNTS FOUND !");
+        alert("NO ACCOUNTS FOUND ! Please Connect Your Accout ");
         console.log("NO ACCOUNTS FOUND !");
       }
     } catch (error) {
