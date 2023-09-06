@@ -150,6 +150,7 @@ export const TransactionProvider = ({ children }) => {
         formData,
         handleChange,
         sendTransaction,
+        isLoading,
       }}
     >
       {children}

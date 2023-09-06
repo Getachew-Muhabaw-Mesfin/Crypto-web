@@ -30,6 +30,7 @@ const Welcome = () => {
     sendTransaction,
     formData,
     handleChange,
+    isLoading,
   } = useContext(TransactionContext);
 
   // const { currentAccount, connectWallet, handleChange, sendTransaction, formData, isLoading } = useContext(TransactionContext);
@@ -134,7 +135,7 @@ const Welcome = () => {
             />
             {/* Send Button */}
             <div className="h-[1px] w-full bg-gray-400 my-2" />
-            {false ? (
+            {isLoading ? (
               <Loader />
             ) : (
               <button
