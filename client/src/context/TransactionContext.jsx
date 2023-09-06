@@ -30,6 +30,7 @@ export const TransactionProvider = ({ children }) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [transactionCount, setTransactionCount] = useState(localStorage.getItem('transactionCount'))
+  const [transactions, setTransactions] = useState([]);
 
 
 //Get All transactions
@@ -40,24 +41,24 @@ const getAllTransactions = async () => {
 
       const availableTransactions =
         await transactionsContract.getAllTranasaction();
-        console.log(availableTransactions)
+        // console.log(availableTransactions)
 
-      // const structuredTransactions = availableTransactions.map(
-      //   (transaction) => ({
-      //     addressTo: transaction.receiver,
-      //     addressFrom: transaction.sender,
-      //     timestamp: new Date(
-      //       transaction.timestamp.toNumber() * 1000
-      //     ).toLocaleString(),
-      //     message: transaction.message,
-      //     keyword: transaction.keyword,
-      //     amount: parseInt(transaction.amount._hex) / 10 ** 18,
-      //   })
-      // );
+      const structuredTransactions = availableTransactions.map(
+        (transaction) => ({
+          addressTo: transaction.receiver,
+          addressFrom: transaction.sender,
+          timestamp: new Date(
+            transaction.timestamp.toNumber() * 1000
+          ).toLocaleString(),
+          message: transaction.message,
+          keyword: transaction.keyword,
+          amount: parseInt(transaction.amount._hex) / 10 ** 18,
+        })
+      );
 
-      // console.log(structuredTransactions);
+       console.log(structuredTransactions);
 
-      // setTransactions(structuredTransactions);
+      setTransactions(structuredTransactions)
     } else {
       console.log("Ethereum is not present");
     }
@@ -98,7 +99,7 @@ const getAllTransactions = async () => {
   const checkIfTransactionsExists = async () => {
     try {
       if (ethereum) {
-        const transactionsContract = createEthereumContract();
+        const transactionsContract = getEthereumContract();
         const currentTransactionCount =
           await transactionsContract.getTransactionCount();
 
@@ -164,11 +165,18 @@ const getAllTransactions = async () => {
       await transactionHash.wait();
       //Scucess
       setIsLoading(false);
+      // setformData({
+      //   addressTo: "",
+      //   amount: "",
+      //   keyword: "",
+      //   message: "",
+      // });
       console.log(`Success -${transactionHash.hash}`);
 
       //get transaction count
       const transactionCount = await transactionContract.getTransactionCount();
       setTransactionCount(transactionCount.toNumber());
+      window.location.reload(false);
     } catch (error) {
       console.log(error);
       throw new Error(
@@ -190,6 +198,7 @@ const getAllTransactions = async () => {
         handleChange,
         sendTransaction,
         isLoading,
+        transactions,
       }}
     >
       {children}
