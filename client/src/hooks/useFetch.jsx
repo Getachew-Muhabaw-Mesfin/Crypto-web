@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-require("dotenv").config();
-const API_KEY = process.env.VITE_GIPHY_API;
+
+const API_KEY = import.meta.env.VITE_GIPHY_API;
 
 const useFetch = ({ keyword }) => {
   const [gifUrl, setGifUrl] = useState("");
